@@ -8,11 +8,17 @@
     body {
       font-family: Arial, sans-serif;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
       height: 100vh;
       margin: 0;
       background-color: #f0f0f0;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+      color: #333;
     }
     #game-container {
       position: relative;
@@ -20,6 +26,9 @@
       height: 400px;
       background-color: #000;
       overflow: hidden;
+      border: 5px solid #333;
+      border-radius: 10px;
+      margin-top: 20px;
     }
     #scoreboard {
       position: absolute;
@@ -29,27 +38,62 @@
       font-size: 16px;
     }
     #restart-btn {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      padding: 5px 10px;
+      margin-top: 10px;
+      padding: 10px 20px;
       background-color: #ff0000;
       color: white;
       border: none;
+      border-radius: 5px;
       cursor: pointer;
+      font-size: 16px;
     }
     #restart-btn:hover {
       background-color: #cc0000;
     }
+    #controls {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .control-row {
+      display: flex;
+      justify-content: center;
+    }
+    .control-btn {
+      width: 50px;
+      height: 50px;
+      margin: 5px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .control-btn:active {
+      background-color: #555;
+    }
   </style>
 </head>
 <body>
+  <h1>Snake Game</h1>
+  <button id="restart-btn">Restart Game</button>
   <div id="game-container">
     <div id="scoreboard">
       Score: <span id="score">0</span> | High Score: <span id="high-score">0</span> | Level: <span id="level">1</span>
     </div>
-    <button id="restart-btn">Restart Game</button>
     <canvas id="gameCanvas" width="600" height="400"></canvas>
+  </div>
+  <div id="controls">
+    <div class="control-row">
+      <button class="control-btn" id="up-btn">↑</button>
+    </div>
+    <div class="control-row">
+      <button class="control-btn" id="left-btn">←</button>
+      <button class="control-btn" id="down-btn">↓</button>
+      <button class="control-btn" id="right-btn">→</button>
+    </div>
   </div>
 
   <script>
@@ -59,6 +103,10 @@
     const highScoreElement = document.getElementById('high-score');
     const levelElement = document.getElementById('level');
     const restartBtn = document.getElementById('restart-btn');
+    const upBtn = document.getElementById('up-btn');
+    const downBtn = document.getElementById('down-btn');
+    const leftBtn = document.getElementById('left-btn');
+    const rightBtn = document.getElementById('right-btn');
 
     let snake = [{ x: 200, y: 200 }];
     let direction = { x: 10, y: 0 };
@@ -66,7 +114,7 @@
     let score = 0;
     let highScore = localStorage.getItem('highScore') || 0;
     let level = 1;
-    const levelThreshold = 5; // Score required to advance to the next level
+    const levelThreshold = 5;
     const maxLevel = 10;
 
     const levels = [
@@ -131,19 +179,16 @@
     function checkCollision() {
       const head = snake[0];
 
-      // Check wall collision
       if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height) {
         return true;
       }
 
-      // Check self collision
       for (let i = 1; i < snake.length; i++) {
         if (head.x === snake[i].x && head.y === snake[i].y) {
           return true;
         }
       }
 
-      // Check obstacle collision
       for (let obstacle of obstacles) {
         if (head.x === obstacle.x && head.y === obstacle.y) {
           return true;
@@ -201,6 +246,22 @@
           if (direction.x === 0) direction = { x: 10, y: 0 };
           break;
       }
+    });
+
+    upBtn.addEventListener('click', () => {
+      if (direction.y === 0) direction = { x: 0, y: -10 };
+    });
+
+    downBtn.addEventListener('click', () => {
+      if (direction.y === 0) direction = { x: 0, y: 10 };
+    });
+
+    leftBtn.addEventListener('click', () => {
+      if (direction.x === 0) direction = { x: -10, y: 0 };
+    });
+
+    rightBtn.addEventListener('click', () => {
+      if (direction.x === 0) direction = { x: 10, y: 0 };
     });
 
     restartBtn.addEventListener('click', resetGame);
