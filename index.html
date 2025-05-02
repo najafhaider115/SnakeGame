@@ -20,22 +20,31 @@
       font-size: 2rem;
       color: #333;
     }
+    #scoreboard {
+      display: flex;
+      justify-content: space-between;
+      width: 90%;
+      max-width: 600px;
+      margin-top: 10px;
+      color: #333;
+      font-size: 16px;
+    }
     #game-container {
       position: relative;
-      width: 600px;
-      height: 400px;
+      width: 90%;
+      max-width: 600px;
+      aspect-ratio: 3 / 2;
       background-color: #000;
       overflow: hidden;
       border: 5px solid #333;
       border-radius: 10px;
       margin-top: 20px;
+      box-sizing: border-box;
     }
-    #scoreboard {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      color: white;
-      font-size: 16px;
+    #gameCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
     }
     #restart-btn {
       margin-top: 10px;
@@ -74,17 +83,29 @@
     .control-btn:active {
       background-color: #555;
     }
+    .boundary {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 2px solid red;
+      box-sizing: border-box;
+    }
   </style>
 </head>
 <body>
   <h1>Snake Game</h1>
-  <button id="restart-btn">Restart Game</button>
+  <div id="scoreboard">
+    <div>Score: <span id="score">0</span></div>
+    <div>High Score: <span id="high-score">0</span></div>
+    <div>Level: <span id="level">1</span></div>
+  </div>
   <div id="game-container">
-    <div id="scoreboard">
-      Score: <span id="score">0</span> | High Score: <span id="high-score">0</span> | Level: <span id="level">1</span>
-    </div>
+    <div class="boundary"></div>
     <canvas id="gameCanvas" width="600" height="400"></canvas>
   </div>
+  <button id="restart-btn">Restart Game</button>
   <div id="controls">
     <div class="control-row">
       <button class="control-btn" id="up-btn">↑</button>
